@@ -15,6 +15,6 @@ public class Application extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/")
     String index() {
-        return "redirect:index";
+        return "Welcome Lollipop Spring Boot Application";
     }
 }
