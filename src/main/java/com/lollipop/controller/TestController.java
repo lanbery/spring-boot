@@ -16,21 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class TestController {
     private final Logger logger = LoggerFactory.getLogger(TestController.class);
 
-    @RequestMapping("")
-    public String home() {
-        return "hello";
-    }
-
     @RequestMapping("/getTid")
     public ModelAndView getTid() {
         GetPaper getPaper = new GetPaper();
         String tid = getPaper.getTid();
         ModelMap result = new ModelMap();
-
-
-
         result.put("tid", tid);
-        logger.info("getTid={}",result.get("tid"));
         return new ModelAndView("index", result);
     }
 }

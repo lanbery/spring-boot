@@ -3,6 +3,6 @@
     <title>测试页面</title>
 </head>
 <body>
-${tid}
+tid=${tid}
 </body>
 </html>
