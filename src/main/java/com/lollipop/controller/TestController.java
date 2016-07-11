@@ -24,6 +24,6 @@ public class TestController {
         ModelMap result = new ModelMap();
 
         result.put("tid",tid);
-        return new ModelAndView("index");
+        return new ModelAndView("index",result);
     }
 }
