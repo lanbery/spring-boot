@@ -40,13 +40,4 @@ Temporary Items
 .apdisk
 
 .idea/
-src/main/java/com/lollipop/controller/GetPaper.java
-src/main/java/com/lollipop/model/
-src/main/java/com/lollipop/service/
-src/main/java/com/lollipop/util/domain/
-src/main/resource/parts.json
-src/main/resource/static/
-src/main/resource/teaching-progress.json
-src/main/resource/test.json
-src/test/
 target/

@@ -22,6 +22,14 @@ import java.util.ArrayList;
  */
 public class HttpClient {
 
+
+    /**
+     * Get string.
+     *
+     * @param url    the url
+     * @param header the header
+     * @return the string
+     */
     public static String get(String url, ArrayList<Header> header) {
         //创建HttpClientBuilder
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
@@ -58,6 +66,14 @@ public class HttpClient {
 
     }
 
+    /**
+     * Post string.
+     *
+     * @param url    the url
+     * @param header the header
+     * @param params the params
+     * @return the string
+     */
     public static String post(String url, ArrayList<Header> header, ArrayList<Param> params) {
         //创建HttpClientBuilder
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();

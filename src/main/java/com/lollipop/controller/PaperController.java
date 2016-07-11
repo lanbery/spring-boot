@@ -10,21 +10,30 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * Created by lollipop on 16/7/7.
  */
-
 @RestController
 @RequestMapping("/jike")
 public class PaperController {
     private final Logger logger = LoggerFactory.getLogger(PaperController.class);
 
+    /**
+     * Gets tid.
+     *
+     * @return the tid
+     */
     @RequestMapping("/get-tid")
     public ModelAndView getTid() {
-        GetPaper getPaper = new GetPaper();
-        String tid = getPaper.getTid();
+//        GetPaper getPaper = new GetPaper();
+        String tid = GetPaper.getTid();
         ModelMap result = new ModelMap();
         result.put("tid", tid);
         return new ModelAndView("index", result);
     }
 
+    /**
+     * Gets paper.
+     *
+     * @return the paper
+     */
     @RequestMapping("/get-paper")
     public ModelAndView getPaper() {
         GetPaper getPaper = new GetPaper();
