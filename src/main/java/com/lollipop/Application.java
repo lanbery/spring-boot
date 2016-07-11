@@ -12,9 +12,4 @@ public class Application extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
-    @RequestMapping("/")
-    String index() {
-        return "Welcome Lollipop Spring Boot Application";
-    }
 }

@@ -12,16 +12,26 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @RestController
-@RequestMapping("/")
-public class TestController {
-    private final Logger logger = LoggerFactory.getLogger(TestController.class);
+@RequestMapping("/jike")
+public class PaperController {
+    private final Logger logger = LoggerFactory.getLogger(PaperController.class);
 
-    @RequestMapping("/getTid")
+    @RequestMapping("/get-tid")
     public ModelAndView getTid() {
         GetPaper getPaper = new GetPaper();
         String tid = getPaper.getTid();
         ModelMap result = new ModelMap();
         result.put("tid", tid);
         return new ModelAndView("index", result);
+    }
+
+    @RequestMapping("/get-paper")
+    public ModelAndView getPaper() {
+        GetPaper getPaper = new GetPaper();
+        String paper = getPaper.getPaper(getPaper.getTid());
+        ModelMap result = new ModelMap();
+        result.put("paper", paper);
+        logger.info("paper={}",paper);
+        return new ModelAndView("paper", result);
     }
 }
