@@ -1,6 +1,7 @@
 package com.lollipop.util;
 
 import com.google.gson.*;
+import com.lollipop.model.Questions;
 import com.lollipop.util.domain.Header;
 import com.lollipop.util.domain.Param;
 import org.slf4j.Logger;
@@ -14,8 +15,10 @@ import java.util.regex.Pattern;
 /**
  * Created by lollipop on 16/7/7.
  */
-
 public class GetPaper {
+    /**
+     * The constant logger.
+     */
     final static Logger logger = LoggerFactory.getLogger(GetPaper.class);
 
     /**
@@ -88,7 +91,6 @@ public class GetPaper {
         if (!"".equals(result)) {
             Pattern p = Pattern.compile("\\{\"grade\".*\\}");
             Matcher matcher = p.matcher(result);
-
             while (matcher.find()) {
                 j = matcher.group();
             }
@@ -98,8 +100,12 @@ public class GetPaper {
         return j;
     }
 
-    //    @Test
-    public static void getPaperQuestion(String paperJson) {
+    /**
+     * Gets paper question.
+     *
+     * @param paperJson the paper json
+     */
+    public static ArrayList<Questions> getPaperQuestion(String paperJson) {
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(paperJson);
 
@@ -155,6 +161,21 @@ public class GetPaper {
                 String paperdifficulty = questions.get("difficulty").getAsString();  //试卷难度
                 String itemHtml = questions.get("item_html").getAsString();  //题目详情
 
+                Pattern answerP = Pattern.compile("<div class=\"dt\">答案.*<div class=\"dt\">");
+                Pattern jiexiP = Pattern.compile("<div class=\"dt\">解析.*<div class=\"dt\">");
+                //<div class="dt">答案：</div><div class="dd">\(\left(-1,\sqrt{2}-1\right)\)</div></div><div class="exp"><div class="dt">
+                if (!"".equals(itemHtml)) {
+                    Matcher amatcher = answerP.matcher(itemHtml);
+                    Matcher jmatcher = jiexiP.matcher(itemHtml);
+                    while (amatcher.find()&&jmatcher.find()) {
+                        String answer = amatcher.group();
+                        String jiexi = jmatcher.group();
+                        logger.info("answer = {},jiexi = {} ",answer,jiexi);
+                    }
+                } else {
+                    logger.info("paper is null");
+                }
+
                 JsonObject data = questions.getAsJsonObject("data");
                 String difficulty = data.get("difficulty").getAsString();   //题目难度
 
@@ -191,5 +212,7 @@ public class GetPaper {
                 }
             }
         }
+
+        return null;
     }
 }
