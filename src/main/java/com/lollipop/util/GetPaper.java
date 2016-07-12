@@ -1,6 +1,9 @@
 package com.lollipop.util;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.lollipop.model.Questions;
 import com.lollipop.util.domain.Header;
 import com.lollipop.util.domain.Param;
@@ -13,30 +16,42 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by lollipop on 16/7/7.
+ * The type Get paper.
  */
-public class GetPaper {
+public final class GetPaper {
     /**
      * The constant logger.
      */
-    final static Logger logger = LoggerFactory.getLogger(GetPaper.class);
+    static final Logger logger = LoggerFactory.getLogger(GetPaper.class);
 
     /**
      * Gets chapter.
      *
-     * @param progress_id the progress id
-     * @param other       the other
+     * @param progressId the progress id
+     * @param other      the other
      * @return the chapter
      */
-    public static String getChapter(String progress_id, String other) {
-        String url = "https://kuailexue.com/math/papers/progress?progress_id=" + progress_id + "&_=" + other;
+    public static String getChapter(
+            final String progressId, final String other) {
+        String url =
+                "https://kuailexue.com/math/papers/progress?progress_id="
+                        + progressId + "&_=" + other;
         ArrayList<Header> ah = new ArrayList<Header>();
-        ah.add(new Header("Cookie", "_xsrf=2|b7615019|0a7af817dc4998545f9cb7fb22e2cb25|1467700785; user=\"2|1:0|10:1467814984|4:user|172:eyJ1c2VybmFtZSI6ICJrbHgxODAxNTExMTg2OF8yMDE2IiwgImxvZ2luX3NuIjogImRZc3VBN3VaRU56anI3eUgiLCAibG9naW5fdG9rZW4iOiAiMDAxN2NkZjU1YmQ1NDQ5ZmIwZWI2MWJiZGExNTNlNmUiLCAicm9sZSI6IDF9|aee9d08b4809177ef320e109eb2876cc1c071b9f09da33b73711f3da93ee22df\"; login_token=\"2|1:0|10:1467875698|11:login_token|44:MDAxN2NkZjU1YmQ1NDQ5ZmIwZWI2MWJiZGExNTNlNmU=|aa6ddfd0efd2e13c9d8898f3ac5a81e1833ca1e08e66b9575b388b24f86b18fb\"; Hm_lvt_e1844f92fc40dfb52ea9dbdf08afe80c=1467701065,1467701550; Hm_lpvt_e1844f92fc40dfb52ea9dbdf08afe80c=1467877864"));
+        ah.add(new Header("Cookie",
+                "_xsrf=2|b7615019|0a7af817dc4998545f9cb7fb22e2cb25|1467700785; "
+                        + "user=\"2|1:0|10:1467814984|4:user|"
+                        + "172:eyJ1c2VybmFtZSI6ICJrbHgxODAxNTExMTg2OF8yMDE2IiwgImxvZ2luX3NuIjogImRZc3VBN3VaRU56anI3eUgiLCAibG9naW5fdG9rZW4iOiAiMDAxN2NkZjU1YmQ1NDQ5ZmIwZWI2MWJiZGExNTNlNmUiLCAicm9sZSI6IDF9"
+                        + "|aee9d08b4809177ef320e109eb2876cc1c071b9f09da33b73711f3da93ee22df\"; "
+                        + "login_token=\"2|1:0|10:1467875698|11:login_token"
+                        + "|44:MDAxN2NkZjU1YmQ1NDQ5ZmIwZWI2MWJiZGExNTNlNmU="
+                        + "|aa6ddfd0efd2e13c9d8898f3ac5a81e1833ca1e08e66b9575b388b24f86b18fb\"; "
+                        + "Hm_lvt_e1844f92fc40dfb52ea9dbdf08afe80c=1467701065,1467701550; "
+                        + "Hm_lpvt_e1844f92fc40dfb52ea9dbdf08afe80c=1467877864"));
         return HttpClient.get(url, ah);
     }
 
     /**
-     * Union paper string.获取包含 tid 的 json
+     * Union paper string.获取包含 tid 的 json.
      *
      * @return the string
      */
@@ -79,7 +94,7 @@ public class GetPaper {
      * @param tid the id
      * @return the paper
      */
-    public static String getPaper(String tid) {
+    public static String getPaper(final String tid) {
         String getUrl = "https://kuailexue.com/math/paper/" + tid + "/edit";
 
         logger.info("url = : {}", getUrl);
@@ -104,8 +119,9 @@ public class GetPaper {
      * Gets paper question.
      *
      * @param paperJson the paper json
+     * @return the paper question
      */
-    public static ArrayList<Questions> getPaperQuestion(String paperJson) {
+    public static ArrayList<Questions> getPaperQuestion(final String paperJson) {
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(paperJson);
 
@@ -138,8 +154,8 @@ public class GetPaper {
         while (progressIt.hasNext()) {
             JsonObject progressObj = progressIt.next().getAsJsonObject();
             String completed = progressObj.get("completed").getAsString();
-            String root_id = progressObj.get("root_id").getAsString();
-            logger.info("completed={},root_id={}", completed, root_id);
+            String rootId = progressObj.get("root_id").getAsString();
+            logger.info("completed={},root_id={}", completed, rootId);
         }
 
         String textbookVer = teachingProgress.get("textbook_ver").getAsString();
@@ -167,10 +183,10 @@ public class GetPaper {
                 if (!"".equals(itemHtml)) {
                     Matcher amatcher = answerP.matcher(itemHtml);
                     Matcher jmatcher = jiexiP.matcher(itemHtml);
-                    while (amatcher.find()&&jmatcher.find()) {
+                    while (amatcher.find() && jmatcher.find()) {
                         String answer = amatcher.group();
                         String jiexi = jmatcher.group();
-                        logger.info("answer = {},jiexi = {} ",answer,jiexi);
+                        logger.info("answer = {},jiexi = {} ", answer, jiexi);
                     }
                 } else {
                     logger.info("paper is null");
@@ -179,8 +195,7 @@ public class GetPaper {
                 JsonObject data = questions.getAsJsonObject("data");
                 String difficulty = data.get("difficulty").getAsString();   //题目难度
 
-                logger.info("itemId={},type={},paperdifficulty={},itemHtml={},difficulty={}"
-                        , itemId, type, paperdifficulty, itemHtml, difficulty);
+                logger.info("itemId={},type={},paperdifficulty={},itemHtml={},difficulty={}", itemId, type, paperdifficulty, itemHtml, difficulty);
 
                 //  qs迭代
                 JsonArray qs = data.getAsJsonArray("qs"); // qs
@@ -193,13 +208,11 @@ public class GetPaper {
                     while (tagPathsIt.hasNext()) {
                         Iterator<JsonElement> detailsIt = tagPathsIt.next().getAsJsonArray().iterator();
                         while (detailsIt.hasNext()) {
-
                             JsonObject detail = detailsIt.next().getAsJsonObject();
-                            String detail_type = detail.get("type_").getAsString();
-                            String detail_id = detail.get("_id").getAsString();
-                            String detail_name = detail.get("name").getAsString();
-
-                            logger.info("detail_type={},detail_id={},detail_name={}", detail_type, detail_id, detail_name);
+                            String detailType = detail.get("type_").getAsString();
+                            String detailId = detail.get("_id").getAsString();
+                            String detailName = detail.get("name").getAsString();
+                            logger.info("detail_type={},detail_id={},detail_name={}", detailType, detailId, detailName);
                         }
                     }
 
@@ -212,7 +225,6 @@ public class GetPaper {
                 }
             }
         }
-
         return null;
     }
 }
