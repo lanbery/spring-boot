@@ -18,11 +18,11 @@ import java.util.regex.Pattern;
 /**
  * The type Get paper.
  */
-public final class GetPaper {
+public final class GetPaperDetails {
     /**
      * The constant logger.
      */
-    static final Logger logger = LoggerFactory.getLogger(GetPaper.class);
+    static final Logger logger = LoggerFactory.getLogger(GetPaperDetails.class);
 
     /**
      * Gets chapter.
@@ -133,7 +133,6 @@ public final class GetPaper {
             JsonObject book = textbookIt.next().getAsJsonObject();
             book.get("title").getAsString();
             book.get("_id").getAsString();
-//            book.get("available").getAsString();
 
             if (!book.get("parent").isJsonNull()) {
                 String parentId = book.get("parent").getAsString();

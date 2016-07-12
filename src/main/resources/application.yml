@@ -6,7 +6,7 @@ logging:
 spring:
   datasource:
     schema: import.sql
-    url: jdbc:mysql://127.0.0.1:3306/jike_exam?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8
     username: root
     password: mysql123
 

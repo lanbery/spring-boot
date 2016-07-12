@@ -1,6 +1,6 @@
 package com.lollipop.controller;
 
-import com.lollipop.util.GetPaper;
+import com.lollipop.util.GetPaperDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.ModelMap;
@@ -23,7 +23,7 @@ public class PaperController {
      */
     @RequestMapping("/get-tid")
     public ModelAndView getTid() {
-        String tid = GetPaper.getTid();
+        String tid = GetPaperDetails.getTid();
         ModelMap result = new ModelMap();
         result.put("tid", tid);
         return new ModelAndView("index", result);
@@ -36,7 +36,7 @@ public class PaperController {
      */
     @RequestMapping("/get-paper")
     public ModelAndView getPaper() {
-        String paper = GetPaper.getPaper(GetPaper.getTid());
+        String paper = GetPaperDetails.getPaper(GetPaperDetails.getTid());
         ModelMap result = new ModelMap();
         result.put("paper", paper);
         logger.info("paper={}",paper);
@@ -45,7 +45,7 @@ public class PaperController {
 
     @RequestMapping("/getPaperQuestion")
     public ModelAndView getPaperQuestion() {
-        GetPaper.getPaperQuestion(GetPaper.getPaper(GetPaper.getTid()));
+        GetPaperDetails.getPaperQuestion(GetPaperDetails.getPaper(GetPaperDetails.getTid()));
         return new ModelAndView("paper");
     }
 }
