@@ -28,7 +28,6 @@ public class MyBatisConfig {
         return new com.alibaba.druid.pool.DruidDataSource();
     }
 
-
     @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
