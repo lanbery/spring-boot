@@ -27,7 +27,8 @@
     <typeAliases>
         <package name="com.lollipop.model"/>
     </typeAliases>
+
     <mappers>
-        <mapper resource="com/lollipop/mapper/UserMapper.xml"/>
+
     </mappers>
 </configuration>

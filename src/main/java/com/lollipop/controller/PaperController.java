@@ -39,7 +39,7 @@ public class PaperController {
         String paper = GetPaperDetails.getPaper(GetPaperDetails.getTid());
         ModelMap result = new ModelMap();
         result.put("paper", paper);
-        logger.info("paper={}",paper);
+        logger.info("paper={}", paper);
         return new ModelAndView("paper", result);
     }
 

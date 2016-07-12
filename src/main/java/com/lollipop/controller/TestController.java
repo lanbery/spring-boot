@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Locale;
-import java.util.Timer;
-
 /**
  * Created by lollipop on 16/7/12.
  */
