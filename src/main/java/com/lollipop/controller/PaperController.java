@@ -48,6 +48,11 @@ public class PaperController {
         return new ModelAndView("paper", result);
     }
 
+    /**
+     * Gets paper question.
+     *
+     * @return the paper question
+     */
     @RequestMapping("/getPaperQuestion")
     public ModelAndView getPaperQuestion() {
 

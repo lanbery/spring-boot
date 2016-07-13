@@ -22,12 +22,23 @@ import javax.sql.DataSource;
 @MapperScan("com.lollipop.mapper")
 public class MyBatisConfig {
 
+    /**
+     * Data source data source.
+     *
+     * @return the data source
+     */
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return new com.alibaba.druid.pool.DruidDataSource();
     }
 
+    /**
+     * Sql session factory bean sql session factory.
+     *
+     * @return the sql session factory
+     * @throws Exception the exception
+     */
     @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
@@ -39,6 +50,12 @@ public class MyBatisConfig {
         return sqlSessionFactoryBean.getObject();
     }
 
+    /**
+     * Create transaction manager platform transaction manager.
+     *
+     * @param dataSource the data source
+     * @return the platform transaction manager
+     */
     @Bean
     protected PlatformTransactionManager createTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);

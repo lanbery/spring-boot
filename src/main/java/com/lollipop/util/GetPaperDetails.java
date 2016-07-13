@@ -121,7 +121,10 @@ public final class GetPaperDetails {
     /**
      * Gets paper question.
      *
-     * @param paperJson the paper json
+     * @param paperJson   the paper json
+     * @param exam        the exam
+     * @param questionArr the question arr
+     * @param points      the points
      * @return the paper question
      */
     public static void getPaperQuestion(final String paperJson, Exam exam, ArrayList<Question> questionArr, ArrayList<Points> points) {

@@ -15,9 +15,18 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("/jike")
 public class TestController {
+    /**
+     * The Get test id.
+     */
     @Autowired
     GetTestId getTestId;
 
+    /**
+     * Gets tid.
+     *
+     * @param id the id
+     * @return the tid
+     */
     @RequestMapping("/id")
     public ModelAndView getTid(@RequestParam String id) {
         Test test = getTestId.getTestId(id);
