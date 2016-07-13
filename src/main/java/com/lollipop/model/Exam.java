@@ -1,14 +1,26 @@
 package com.lollipop.model;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 
 /**
  * Created by lollipop on 16/7/13.
  */
+
+@Repository
 public class Exam {
     private String examId;
     private String difficulty;
-    private String[] question;
+    private ArrayList<Question> questions;
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(ArrayList<Question> questions) {
+        this.questions = questions;
+    }
 
     public String getExamId() {
         return examId;
@@ -24,13 +36,5 @@ public class Exam {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
-    }
-
-    public String[] getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String[] question) {
-        this.question = question;
     }
 }

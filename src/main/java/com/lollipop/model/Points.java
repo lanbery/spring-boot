@@ -1,13 +1,28 @@
 package com.lollipop.model;
 
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+
 /**
  * Created by lollipop on 16/7/13.
  */
+
+@Repository
 public class Points {
     private String pointId;
     private String parent;
-    private String[] childeren;
+    private ArrayList<String> children;
     private String name;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getPointId() {
         return pointId;
@@ -25,12 +40,12 @@ public class Points {
         this.parent = parent;
     }
 
-    public String[] getChilderen() {
-        return childeren;
+    public ArrayList<String> getChilderen() {
+        return children;
     }
 
-    public void setChilderen(String[] childeren) {
-        this.childeren = childeren;
+    public void setChildren(ArrayList<String> children) {
+        this.children = children;
     }
 
     public String getName() {

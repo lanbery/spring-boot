@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -114,6 +113,7 @@ public final class GetPaperDetails {
             }
         } else {
             logger.info("paper is null");
+            return null;
         }
         return j;
     }
@@ -124,43 +124,59 @@ public final class GetPaperDetails {
      * @param paperJson the paper json
      * @return the paper question
      */
-    public static void getPaperQuestion(final String paperJson, Exam exam, Question question, Points points) {
+    public static void getPaperQuestion(final String paperJson, Exam exam, ArrayList<Question> questionArr, ArrayList<Points> points) {
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(paperJson);
-
         String grade = object.get("grade").getAsString();
+        String paperId = object.get("_id").getAsString();
+        exam.setExamId(paperId);
+
         JsonObject teachingProgress = object.getAsJsonObject("teaching_progress");
         JsonArray textbooks = teachingProgress.getAsJsonArray("textbooks");
-
 
         Iterator<JsonElement> textbookIt = textbooks.iterator();
         while (textbookIt.hasNext()) {
             JsonObject book = textbookIt.next().getAsJsonObject();
             String title = book.get("title").getAsString();
-            String id = book.get("_id").getAsString();
+            String pointId = book.get("_id").getAsString();
 
-            logger.info("title={},id={}", title,id);
+            Points bookPoint = new Points();
+            bookPoint.setPointId(pointId);
+            bookPoint.setName(title);
+
+            ArrayList<String> pointsChildren = new ArrayList<String>();
+
+            logger.info("title={},id={}", title, pointId);
 
             if (!book.get("parent").isJsonNull()) {
                 String parentId = book.get("parent").getAsString();
+                bookPoint.setPointId(paperId);
+
                 logger.info("parentId={},", parentId);
             }
 
             if (!book.get("children").isJsonNull()) {
                 Iterator<JsonElement> childrenIt = book.getAsJsonArray("children").iterator();
                 while (childrenIt.hasNext()) {
+
                     String childrenId = childrenIt.next().getAsString();
+                    pointsChildren.add(childrenId);
+                    bookPoint.setChildren(pointsChildren);
+
                     logger.info("childrenId={}", childrenId);
                 }
             }
+            points.add(bookPoint);
         }
 
         JsonArray progress = teachingProgress.getAsJsonArray("progress");
         Iterator<JsonElement> progressIt = progress.iterator();
+        // progress
         while (progressIt.hasNext()) {
             JsonObject progressObj = progressIt.next().getAsJsonObject();
             String completed = progressObj.get("completed").getAsString();
             String rootId = progressObj.get("root_id").getAsString();
+
             logger.info("completed={},root_id={}", completed, rootId);
         }
 
@@ -177,11 +193,20 @@ public final class GetPaperDetails {
             // part
             Iterator<JsonElement> partIt = part.iterator();
             while (partIt.hasNext()) {
+                Question q = new Question();
+
                 JsonObject questions = partIt.next().getAsJsonObject();
                 String itemId = questions.get("item_id").getAsString();  //题目Id
+                q.setQuestionId(itemId);
+
                 String type = questions.get("type").getAsString();   //题目类型
+                q.setQuestionType(type);
+
                 String paperdifficulty = questions.get("difficulty").getAsString();  //试卷难度
+                exam.setDifficulty(paperdifficulty);
+
                 String itemHtml = questions.get("item_html").getAsString();  //题目详情
+                q.setQuestionContent(itemHtml);
 
                 Pattern answerP = Pattern.compile("<div class=\\\"answer\\\">.*</div></div>");
                 Pattern jiexiP = Pattern.compile("<div class=\\\"exp\\\">.*</div></div>");
@@ -209,12 +234,18 @@ public final class GetPaperDetails {
                         Matcher imgPathMatcher = imgP.matcher(answer);
                         while (imgPathMatcher.find()) {
                             String imgPath = imgPathMatcher.group();
+                            q.setQuestionAnswer(answer);
+                            q.setQuestionImg(imgPath);
+
                             logger.info("answer = {} ", answer, imgPath);
                         }
                         String jiexi = jmatcher.group();
                         Matcher jiexiImgMatcher = imgP.matcher(jiexi);
                         while (jiexiImgMatcher.find()) {
                             String jiexiImgPath = jiexiImgMatcher.group();
+                            q.setQuestionJiexi(jiexi);
+                            q.setQuestionJiexiImg(jiexiImgPath);
+
                             logger.info("jiexi = {} ", answer, jiexiImgPath);
                         }
                     }
@@ -224,6 +255,7 @@ public final class GetPaperDetails {
 
                 JsonObject data = questions.getAsJsonObject("data");
                 String difficulty = data.get("difficulty").getAsString();   //题目难度
+                q.setDifficulty(difficulty);
 
                 logger.info("itemId={},type={},paperdifficulty={},itemHtml={},difficulty={}", itemId, type, paperdifficulty, itemHtml, difficulty);
 
@@ -242,18 +274,26 @@ public final class GetPaperDetails {
                             String detailType = detail.get("type_").getAsString();
                             String detailId = detail.get("_id").getAsString();
                             String detailName = detail.get("name").getAsString();
+
                             logger.info("detail_type={},detail_id={},detail_name={}", detailType, detailId, detailName);
                         }
                     }
 
                     // tagIds 迭代
                     Iterator<JsonElement> tagIdsIt = tagObj.getAsJsonArray("tag_ids").iterator();
+                    ArrayList<String> questionPointsArr = new ArrayList<String>();
+
                     while (tagIdsIt.hasNext()) {
                         String tagId = tagIdsIt.next().getAsString();
+                        questionPointsArr.add(tagId);
+                        q.setQuestionPoints(questionPointsArr);
+
                         logger.info("tagId={}", tagId);
                     }
                 }
+                questionArr.add(q);
             }
+            exam.setQuestions(questionArr);
         }
     }
 }

@@ -1,11 +1,33 @@
 package com.lollipop.model;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+
 /**
  * Created by lollipop on 16/7/13.
  */
+
+@Repository
 public class Question {
     private String questionId;
     private String questionType;
+    private String questionContent;
+    private String questionImg;
+    private ArrayList<String> questionPoints;
+    private String questionAnswer;
+    private String questionJiexi;
+    private String questionJiexiImg;
+    private String difficulty;
+
+    public String getQuestionJiexiImg() {
+        return questionJiexiImg;
+    }
+
+    public void setQuestionJiexiImg(String questionJiexiImg) {
+        this.questionJiexiImg = questionJiexiImg;
+    }
 
     public String getQuestionContent() {
         return questionContent;
@@ -39,11 +61,7 @@ public class Question {
         this.questionImg = questionImg;
     }
 
-    public String[] getQuestionPoints() {
-        return questionPoints;
-    }
-
-    public void setQuestionPoints(String[] questionPoints) {
+    public void setQuestionPoints(ArrayList<String> questionPoints) {
         this.questionPoints = questionPoints;
     }
 
@@ -70,12 +88,5 @@ public class Question {
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
     }
-
-    private String questionContent;
-    private String questionImg;
-    private String[] questionPoints;
-    private String questionAnswer;
-    private String questionJiexi;
-    private String difficulty;
 
 }
