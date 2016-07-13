@@ -4,7 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.lollipop.model.Questions;
+import com.lollipop.model.Exam;
+import com.lollipop.model.Points;
+import com.lollipop.model.Question;
 import com.lollipop.util.domain.Header;
 import com.lollipop.util.domain.Param;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -121,22 +124,26 @@ public final class GetPaperDetails {
      * @param paperJson the paper json
      * @return the paper question
      */
-    public static ArrayList<Questions> getPaperQuestion(final String paperJson) {
+    public static void getPaperQuestion(final String paperJson, Exam exam, Question question, Points points) {
         JsonParser parser = new JsonParser();
         JsonObject object = (JsonObject) parser.parse(paperJson);
 
         String grade = object.get("grade").getAsString();
         JsonObject teachingProgress = object.getAsJsonObject("teaching_progress");
         JsonArray textbooks = teachingProgress.getAsJsonArray("textbooks");
+
+
         Iterator<JsonElement> textbookIt = textbooks.iterator();
         while (textbookIt.hasNext()) {
             JsonObject book = textbookIt.next().getAsJsonObject();
-            book.get("title").getAsString();
-            book.get("_id").getAsString();
+            String title = book.get("title").getAsString();
+            String id = book.get("_id").getAsString();
+
+            logger.info("title={},id={}", title,id);
 
             if (!book.get("parent").isJsonNull()) {
                 String parentId = book.get("parent").getAsString();
-                logger.info("parentId={}", parentId);
+                logger.info("parentId={},", parentId);
             }
 
             if (!book.get("children").isJsonNull()) {
@@ -176,16 +183,40 @@ public final class GetPaperDetails {
                 String paperdifficulty = questions.get("difficulty").getAsString();  //试卷难度
                 String itemHtml = questions.get("item_html").getAsString();  //题目详情
 
-                Pattern answerP = Pattern.compile("<div class=\"dt\">答案.*<div class=\"dt\">");
-                Pattern jiexiP = Pattern.compile("<div class=\"dt\">解析.*<div class=\"dt\">");
+                Pattern answerP = Pattern.compile("<div class=\\\"answer\\\">.*</div></div>");
+                Pattern jiexiP = Pattern.compile("<div class=\\\"exp\\\">.*</div></div>");
+                Pattern imgP = Pattern.compile("<img src=\\\".*/>");
+
+                //<img src=\"/data/img/5709504046844968c9faaf9f7f8b8036.png\" class=\"img-responsive\" width=\"113\" style=\"width:113px\"/>
                 //<div class="dt">答案：</div><div class="dd">\(\left(-1,\sqrt{2}-1\right)\)</div></div><div class="exp"><div class="dt">
                 if (!"".equals(itemHtml)) {
+//                    String[] answer = answerP.split(itemHtml);
+//                    if (answer.length > 0) {
+//                        String[] answerImgPath = imgP.split(answer[0]);
+//                        logger.info("answer = {},img={} ", answer[0], answerImgPath[0]);
+//                    }
+//
+//                    String[] jiexi = jiexiP.split(itemHtml);
+//                    if (jiexi.length > 0) {
+//                        String[] jiexiImgPath = imgP.split(jiexi[0]);
+//                        logger.info("jiexi = {},img={} ", jiexi[0], jiexiImgPath[0]);
+//                    }
+
                     Matcher amatcher = answerP.matcher(itemHtml);
                     Matcher jmatcher = jiexiP.matcher(itemHtml);
                     while (amatcher.find() && jmatcher.find()) {
                         String answer = amatcher.group();
+                        Matcher imgPathMatcher = imgP.matcher(answer);
+                        while (imgPathMatcher.find()) {
+                            String imgPath = imgPathMatcher.group();
+                            logger.info("answer = {} ", answer, imgPath);
+                        }
                         String jiexi = jmatcher.group();
-                        logger.info("answer = {},jiexi = {} ", answer, jiexi);
+                        Matcher jiexiImgMatcher = imgP.matcher(jiexi);
+                        while (jiexiImgMatcher.find()) {
+                            String jiexiImgPath = jiexiImgMatcher.group();
+                            logger.info("jiexi = {} ", answer, jiexiImgPath);
+                        }
                     }
                 } else {
                     logger.info("paper is null");
@@ -224,6 +255,5 @@ public final class GetPaperDetails {
                 }
             }
         }
-        return null;
     }
 }
